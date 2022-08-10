@@ -562,9 +562,6 @@ function displayAllbacks() {
 
 resetСardSuit();
   previousCard = '';
-  // load playing card's back
-    var cardtmp = document.createElement('img');
-    cardtmp.setAttribute('src', './images/matrix/Card_back_suits_green.svg');
     
   for (let cardIndex = 0; cardIndex < 52; cardIndex++) { // first initialisation: randomize cards and display them
       var cardRank = Math.floor(Math.random() * 13);
@@ -635,10 +632,21 @@ function getSelect(selectedElement, cardId) {
   } else {
     let cardId2 = previousCard.getAttribute('data-id'); // cards calidated and go away
     if (cardArray[cardId2] == cardArray[cardId]) {
-        selectedElement.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        
+        // NOTE! ------------------------------------------------------------------------------ NOTE!
+        // This part of code is for https://raw.githack.com only,
+        // if you want to start game on local computer,
+        // comment two lines below which include 'https://raw.githack.com/AleksShadow/JScriptSolitaire/main/images/Matrix/Card_back_suits_green.svg'
+        // and uncomment two lines which include 'images/Matrix/Card_back_suits_green.svg'
+        
+        // selectedElement.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        selectedElement.setAttribute('src', 'https://raw.githack.com/AleksShadow/JScriptSolitaire/main/images/Matrix/Card_back_suits_green.svg');
         selectedElement.style.opacity = 0.3;
+        
         // selectedElement.removeAttribute('style', 'border');
-        previousCard.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        // previousCard.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        previousCard.setAttribute('src', 'https://raw.githack.com/AleksShadow/JScriptSolitaire/main/images/Matrix/Card_back_suits_green.svg');
+        
         previousCard.style.opacity = 0.3;
         // previousCard.removeAttribute('style', 'border');
         cardArray[cardId] = 13;
