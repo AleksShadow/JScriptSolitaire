@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Aleksandr Tselikovskii">
+    <meta name="email" content="tsel0003@algonquinlive.com">
+
+    <style>
+.cardsDisplay {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr; /* 9 rows */
+    grid-column-gap: 1%;
+    /* grid-row-gap: 1%;*/
+    background-color: rgb(23, 129, 94);
+    padding: 15px 10px 20px 15px;
+    width: 850px;
+    height: 650px;
+    overflow: auto;
+}
+  
+.cardsDisplay button {
+    border: none;
+    border-radius: 5px;
+    font-family: Calibri, Arial, Helvetica, sans-serif;
+    font-size: 16pt;
+    margin-bottom: 3%;
+}
+
+#reset {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    border: none;
+    width: 90%;
+    border: none;
+    font-family: Calibri, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    background-color: rgb(123, 219, 184);
+    padding: 5px;
+    color: black;
+    border-radius: 30px 15px 50px;
+}
+
+#reset:hover {
+    background-color:rgb(3, 109, 74);
+    color: white;
+}
+
+#reset:active {
+    background-color: rgb(13, 119, 84);
+    box-shadow: 2px 2px black;
+    transform: translateY(3px);
+}
+
+.cardsDisplay img {
+    width:70px;
+    vertical-align: middle;
+    margin: 3px 0 3px 0;
+    opacity: 1.0;
+}
+
+img.cardImage {
+    opacity: 1.0;
+}
+
+img.cardImage:hover {
+    opacity: 0.5;
+}
+
+.cardsDisplay button:active {
+    background-color: bisque;
+    box-shadow: 0 5px #666;
+    transform: translateY(4px);
+    box-shadow: 0 4px 8px 0 black, 0 3px 4px 0 black;
+}
+.display {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-column-gap: 1%;
+    grid-row-gap: 10%;
+    background-color: rgb(23, 129, 94);
+    color: white;
+    padding: 5px 10px 30px 15px;
+    width: 850px;
+    height: 5px;
+    font-family: displayFont, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    text-align: center;
+}
+    #timer {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    background-color: rgb(123, 219, 184);
+    color: black;
+    width: 80%;
+    border-radius: 15px 50px 30px;
+    font-weight: bold;
+    margin-bottom: 3%;
+}
+
+#score {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    background-color: rgb(123, 219, 184);
+    color: black;
+    width: 80%;
+    border-radius: 50px 15px;
+    font-weight: bold;
+    margin-bottom: 3%;
+}
+
+#help {
+    display: grid;
+    justify-content: center;
+    align-content: center;
+    border: none;
+    font-family: Calibri, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    background-color: rgb(123, 219, 184);
+    color: black;
+    padding: 5px;
+    width: 80%;
+    border-radius: 15px 50px;
+    margin-bottom: 3%;
+}
+
+#help:hover {
+    background-color:rgb(3, 109, 74);
+    color: white;
+}
+
+#help:active {
+    background-color: rgb(13, 119, 84);
+    box-shadow: 2px 2px black;
+    transform: translateY(3px);
+}
+
+/* Popup */
+.popup {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* The actual popup */
+.popup .popuptext {
+    visibility: hidden;
+    width: 300px;
+    background-color: rgb(123, 219, 184);
+    color: black;
+    text-align: center;
+    border-radius: 6px;
+    padding: 10% 10%;
+    position: absolute;
+    z-index: 1;
+    top: 125%;
+    left: 50%;
+    margin-left: -100px;
+    border-radius: 15px 50px;
+}
+
+/* Popup arrow */
+.popup .popuptext::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: rgb(123, 219, 184) transparent transparent transparent;
+}
+
+/* Hhide/show the popup) */
+.popup .show {
+    visibility: visible;
+    -webkit-animation: fadeIn 1s;
+    animation: fadeIn 1s
+}
+
+/* Animation */
+@-webkit-keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity: 1;}
+}
+
+@keyframes fadeIn {
+    from {opacity: 0;}
+    to {opacity:1 ;}
+}
+
+.upperInfo {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-column-gap: 1%;
+    grid-row-gap: 1%;
+    background-color: rgb(23, 129, 94);
+    color: white;
+    padding: 5px 10px 5px 15px;
+    width: 850px;
+    font-family: Calibri, Arial, Helvetica, sans-serif;
+    font-size: 12pt;
+    text-align: left;
+}
+
+    </style>
+
+    <title>Solitaire</title>
+
+</head>
+<body>
+    <div class="calculator">
+        <div class="upperInfo">
+          Solitaire v.1.0 | 2021
+        </div>
+        <div class="display">
+            <div id="timer"></div>
+            <div id="score"></div>
+            <div class="popup" id='help' onclick="help()">Help
+                <span class="popuptext" id="myPopup">Help. Game Rules...<br>
+                  This Solitaire belongs to that amazing type of puzzle games, 
+                  which in their combinational capabilities are almost as good 
+                  as chess puzzles. At the same time, the unfolding of this solitaire 
+                  plays the role of emotional relaxation. This Solitaire involves 
+                  the layout of cards according to certain rules: it is necessary 
+                  to clean this card field, removing two cards of the same rank 
+                  in one move - two deuces, two queens, etc. You can use the last 
+                  cards of vertical columns only. To cancel the selected card, 
+                  click on any other in the last rows.</span>
+            </div>
+            <div><button id='reset' onclick="reset()">Shuffle</button></div>
+        </div>
+    
+        <div class="cardsDisplay">
+
+        </div>
+    
+    </div>
+
+<script>
+
+const cardImages = [
+  {
+    name: 'club_ace',
+    img: 'images/matrix/Playing_card_club_A.svg'
+  },
+  {
+    name: 'club_2',
+    img: 'images/matrix/Playing_card_club_2.svg'
+  },
+  {
+    name: 'club_3',
+    img: 'images/matrix/Playing_card_club_3.svg'
+  },
+  {
+    name: 'club_4',
+    img: 'images/matrix/Playing_card_club_4.svg'
+  },
+  {
+    name: 'club_5',
+    img: 'images/matrix/Playing_card_club_5.svg'
+  },
+  {
+    name: 'club_6',
+    img: 'images/matrix/Playing_card_club_6.svg'
+  },
+  {
+    name: 'club_7',
+    img: 'images/matrix/Playing_card_club_7.svg'
+  },
+  {
+    name: 'club_8',
+    img: 'images/matrix/Playing_card_club_8.svg'
+  },
+  {
+    name: 'club_9',
+    img: 'images/matrix/Playing_card_club_9.svg'
+  },
+  {
+    name: 'club_10',
+    img: 'images/matrix/Playing_card_club_10.svg'
+  },
+  {
+    name: 'club_J',
+    img: 'images/matrix/Playing_card_club_J.svg'
+  },
+  {
+    name: 'club_Q',
+    img: 'images/matrix/Playing_card_club_Q.svg'
+  },
+  {
+    name: 'club_K',
+    img: 'images/matrix/Playing_card_club_K.svg'
+  },
+  {
+    name: 'diamond_A',
+    img: 'images/matrix/Playing_card_diamond_A.svg'
+  },
+  {
+    name: 'diamond_2',
+    img: 'images/matrix/Playing_card_diamond_2.svg'
+  },
+  {
+    name: 'diamond_3',
+    img: 'images/matrix/Playing_card_diamond_3.svg'
+  },
+  {
+    name: 'diamond_4',
+    img: 'images/matrix/Playing_card_diamond_4.svg'
+  },
+  {
+    name: 'diamond_5',
+    img: 'images/matrix/Playing_card_diamond_5.svg'
+  },
+  {
+    name: 'diamond_6',
+    img: 'images/matrix/Playing_card_diamond_6.svg'
+  },
+  {
+    name: 'diamond_7',
+    img: 'images/matrix/Playing_card_diamond_7.svg'
+  },
+  {
+    name: 'diamond_8',
+    img: 'images/matrix/Playing_card_diamond_8.svg'
+  },
+  {
+    name: 'diamond_9',
+    img: 'images/matrix/Playing_card_diamond_9.svg'
+  },
+  {
+    name: 'diamond_10',
+    img: 'images/matrix/Playing_card_diamond_10.svg'
+  },
+  {
+    name: 'diamond_J',
+    img: 'images/matrix/Playing_card_diamond_J.svg'
+  },
+  {
+    name: 'diamond_Q',
+    img: 'images/matrix/Playing_card_diamond_Q.svg'
+  },
+  {
+    name: 'diamond_K',
+    img: 'images/matrix/Playing_card_diamond_K.svg'
+  },
+  {
+    name: 'heart_A',
+    img: 'images/matrix/Playing_card_heart_A.svg'
+  },
+  {
+    name: 'heart_2',
+    img: 'images/matrix/Playing_card_heart_2.svg'
+  },
+  {
+    name: 'heart_3',
+    img: 'images/matrix/Playing_card_heart_3.svg'
+  },
+  {
+    name: 'heart_4',
+    img: 'images/matrix/Playing_card_heart_4.svg'
+  },
+  {
+    name: 'heart_5',
+    img: 'images/matrix/Playing_card_heart_5.svg'
+  },
+  {
+    name: 'heart_6',
+    img: 'images/matrix/Playing_card_heart_6.svg'
+  },
+  {
+    name: 'heart_7',
+    img: 'images/matrix/Playing_card_heart_7.svg'
+  },
+  {
+    name: 'heart_8',
+    img: 'images/matrix/Playing_card_heart_8.svg'
+  },
+  {
+    name: 'heart_9',
+    img: 'images/matrix/Playing_card_heart_9.svg'
+  },
+  {
+    name: 'heart_10',
+    img: 'images/matrix/Playing_card_heart_10.svg'
+  },
+  {
+    name: 'heart_J',
+    img: 'images/matrix/Playing_card_heart_J.svg'
+  },
+  {
+    name: 'heart_Q',
+    img: 'images/matrix/Playing_card_heart_Q.svg'
+  },
+  {
+    name: 'heart_K',
+    img: 'images/matrix/Playing_card_heart_K.svg'
+  },
+  {
+    name: 'spade_A',
+    img: 'images/matrix/Playing_card_spade_A.svg'
+  },
+  {
+    name: 'spade_2',
+    img: 'images/matrix/Playing_card_spade_2.svg'
+  },
+  {
+    name: 'spade_3',
+    img: 'images/matrix/Playing_card_spade_3.svg'
+  },
+  {
+    name: 'spade_4',
+    img: 'images/matrix/Playing_card_spade_4.svg'
+  },
+  {
+    name: 'spade_5',
+    img: 'images/matrix/Playing_card_spade_5.svg'
+  },
+  {
+    name: 'spade_6',
+    img: 'images/matrix/Playing_card_spade_6.svg'
+  },
+  {
+    name: 'spade_7',
+    img: 'images/matrix/Playing_card_spade_7.svg'
+  },
+  {
+    name: 'spade_8',
+    img: 'images/matrix/Playing_card_spade_8.svg'
+  },
+  {
+    name: 'spade_9',
+    img: 'images/matrix/Playing_card_spade_9.svg'
+  },
+  {
+    name: 'spade_10',
+    img: 'images/matrix/Playing_card_spade_10.svg'
+  },
+  {
+    name: 'spade_J',
+    img: 'images/matrix/Playing_card_spade_J.svg'
+  },
+  {
+    name: 'spade_Q',
+    img: 'images/matrix/Playing_card_spade_Q.svg'
+  },
+  {
+    name: 'spade_K',
+    img: 'images/matrix/Playing_card_spade_K.svg'
+  },
+];
+
+var amountOfCards = 52;
+var leftCards = 52
+var cardArray = []; // 6, 9 elements (6 rows, 9 columns)
+var cardsSuit  = []; // 13 elements - cards from 1 (Ace) to 10, then 11 (Jack), 12 - Queen, 13 - King
+var cardsChosen = [];
+var selectedCards = 0;
+var previousCard = ''
+var timer = document.querySelector('#timer');
+var min = 0;
+var sec=0;
+var score = document.querySelector('#score');
+
+// Suits: clubs (♣), diamonds (♦), hearts (♥) and spades (♠)
+// Card Ranks: Ace, King, Queen Jack, 1-10
+
+function resetСardSuit() {
+  for (let cardSuitIndex = 0; cardSuitIndex < 13; cardSuitIndex++) { // set the default value = 0 for cardSuit
+    cardsSuit[cardSuitIndex] = 0;
+  }
+}
+  
+  const cardText = document.querySelector(".cardsDisplay");
+  console.log(cardText);
+
+function reset() {
+  // displayAllbacks();
+  clearInterval(timeUpdate);
+  timeUpdate = setInterval(gameTimer, 1000);
+  resetСardSuit();
+  shufflingCards();
+}
+
+let timeUpdate = setInterval(gameTimer, 1000);
+score.textContent = 'Cards: ' + amountOfCards;
+
+function gameTimer() {
+  let timeFormat = 'Time: ' + min + ':' + '0' + sec;
+  sec++;
+  if (sec > 10) {
+    timeFormat = 'Time: ' + min + ':' + sec;
+  }
+  if (sec > 59) {
+    sec = 0;
+    min++;
+    timeFormat = 'Time: ' + min + ':' + '0' + sec;
+  }
+
+  timer.textContent = timeFormat;
+}
+
+function help() {
+  var popup = document.querySelector("#myPopup");
+  popup.classList.toggle("show");
+}
+
+
+function shufflingCards() {
+  selectedCards = 0;
+  min = 0;
+  sec = 0;
+  scoreGame = 0;
+  amountOfCards = 52;
+  score.textContent = 'Cards: ' + amountOfCards;
+  for (let cardIndex = 0; cardIndex < 52; cardIndex++) { // randomize cards
+      var cardRank = Math.floor(Math.random() * 13);
+        if (cardsSuit[cardRank] < 4) {
+          cardArray[cardIndex] = cardRank;
+          console.log('Card value =', cardArray[cardIndex]);
+
+          var newCard = allCards[cardIndex];
+
+          newCard.removeAttribute('style', 'opacity');
+          // newCard.removeAttribute('style', 'border');
+
+          newCard.setAttribute('src', cardImages[cardRank + (cardsSuit[cardRank] * 13)].img);
+          newCard.setAttribute('class', 'cardImage');
+          // allCards[cardIndex].style.opacity = 1.0;
+          newCard.addEventListener('click', selectCard);
+          // allCards[cardIndex].style.border = '2px solid red';
+          // console.log('card Rank is ' + cardRank);
+          // console.log('amount of card is ' + cardsSuit[cardRank]);
+          console.log('img is ' + cardImages[cardRank + (cardsSuit[cardRank] * 13)].img);
+          newCard.setAttribute('data-id', cardIndex);
+          cardsSuit[cardRank]++;
+      } else {
+        cardIndex--
+      }
+  }
+}
+
+function displayAllbacks() {
+  console.log(cardText);
+  for (let cardIndex = 0; cardIndex < 52; cardIndex++) {
+    console.log(cardArray[cardIndex]);
+    console.log(allCards[cardIndex]);
+      setTimeout(function() {
+        allCards[cardIndex].setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+    }, cardIndex * 30);
+    
+    // card.setAttribute('data-id', cardRank);
+    // card.addEventListener('click', selectCard);
+    // cardText.appendChild(card);
+
+  }
+
+}
+
+resetСardSuit();
+  previousCard = '';
+  for (let cardIndex = 0; cardIndex < 52; cardIndex++) { // first initialisation: randomize cards and display them
+      var cardRank = Math.floor(Math.random() * 13);
+        if (cardsSuit[cardRank] < 4) {
+          cardArray[cardIndex] = cardRank;
+          console.log('Card value:', cardArray[cardIndex] + 1);
+
+        var card = document.createElement('img');
+          card.setAttribute('src', cardImages[cardRank + (cardsSuit[cardRank] * 13)].img); // loading all 52 images
+
+          console.log('number picture is ' + (cardRank + (cardsSuit[cardRank] * 13)));
+          // console.log('card Rank is ' + cardRank);
+          // console.log('amount of card is ' + cardsSuit[cardRank]);
+
+          card.setAttribute('data-id', cardIndex);
+          card.setAttribute('class', 'cardImage');
+          card.addEventListener('click', selectCard);
+
+          
+          cardText.appendChild(card);
+          cardsSuit[cardRank]++;
+
+      } else {
+        cardIndex--
+      }
+  }
+  var allCards = document.querySelectorAll("img.cardImage");
+
+  
+  
+function selectCard() { // checking if it is the last card in the column
+  if (selectedCards < 2) {
+    const selectedElement = this;
+
+    console.log(selectedElement);
+    let cardId = this.getAttribute('data-id');
+    console.log(cardId, 'card value: ', cardArray[cardId], 'next card value', cardArray[parseInt(cardId) + 9]);
+
+  if (cardId > 42) {
+    if (cardArray[cardId] != 13) { // value 13 - card is thrown off
+      selectedCards++;
+      getSelect(selectedElement, cardId)
+      console.log('OK');
+    }
+  } else {
+      if (cardArray[parseInt(cardId) + 9] == 13) {
+        console.log('next card = ', cardArray[cardId + 9])
+        selectedCards++;
+        getSelect(selectedElement, cardId)
+        console.log('OK');
+      }
+      console.log('Error')
+    }
+  }
+}
+
+function getSelect(selectedElement, cardId) {
+  selectedElement.style.opacity = 0.5;
+  // selectedElement.style.border = '2px solid red';
+   
+  removeCard(selectedElement); // removing EventListener for clicking
+  selectedElement.removeAttribute('class', 'cardImage'); // removing 'hover mouse' selection
+  selectedElement.style.opacity = 0.3;
+
+  if (previousCard == '') {
+    previousCard = selectedElement;
+    console.log('previousCard', previousCard)
+  } else {
+    let cardId2 = previousCard.getAttribute('data-id'); // cards calidated and go away
+    if (cardArray[cardId2] == cardArray[cardId]) {
+        selectedElement.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        selectedElement.style.opacity = 0.3;
+        // selectedElement.removeAttribute('style', 'border');
+        previousCard.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        previousCard.style.opacity = 0.3;
+        // previousCard.removeAttribute('style', 'border');
+        cardArray[cardId] = 13;
+        cardArray[cardId2] = 13;
+        leftCards = leftCards - 2;
+        amountOfCards = amountOfCards - 2;
+        score.textContent = 'Cards: ' + amountOfCards;
+
+        win();
+
+        console.log(cardArray[cardId]);
+        console.log(cardArray[cardId2]);
+
+    } else {
+          selectedElement.addEventListener('click', selectCard);
+          selectedElement.removeAttribute('style', 'opacity');
+          // selectedElement.removeAttribute('style', 'border');
+          selectedElement.setAttribute('class', 'cardImage');
+          // selectedElement.setAttribute('src', cardImages[cardRank + (cardsSuit[cardRank] * 13)].img);
+          // selectedElement.setAttribute('class', 'cardImage');
+          // allCards[cardIndex].style.opacity = 1.0;
+          previousCard.addEventListener('click', selectCard);
+          previousCard.removeAttribute('style', 'opacity');
+          // previousCard.removeAttribute('style', 'border');
+          previousCard.setAttribute('class', 'cardImage');
+
+    }
+    previousCard = '';
+    selectedCards = 0;
+  }
+  // selectedCards++;
+
+// } else {
+//   this.removeAttribute('style.opacity');
+//   this.removeAttribute('border');
+// }
+// // cardsChosen.push(cardImages[cardId].name);
+}
+
+function win() {
+if (amountOfCards == 0) {
+   clearInterval(timeUpdate);
+}
+}
+
+
+  function removeCard(selectedElement) {
+    selectedElement.removeEventListener('click', selectCard);
+  }
+      </script>    
+
+</body>
+</html>
+
