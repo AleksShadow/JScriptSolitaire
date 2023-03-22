@@ -549,7 +549,7 @@ function displayAllbacks() {
     console.log(cardArray[cardIndex]);
     console.log(allCards[cardIndex]);
       setTimeout(function() {
-        allCards[cardIndex].setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        allCards[cardIndex].setAttribute('src', 'images/matrix/Card_back_suits_green.svg');
     }, cardIndex * 30);
     
     // card.setAttribute('data-id', cardRank);
@@ -633,11 +633,11 @@ function getSelect(selectedElement, cardId) {
     let cardId2 = previousCard.getAttribute('data-id'); // cards calidated and go away
     if (cardArray[cardId2] == cardArray[cardId]) {
         
-        selectedElement.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        selectedElement.setAttribute('src', 'images/matrix/Card_back_suits_green.svg');
         selectedElement.style.opacity = 0.3;
         
         // selectedElement.removeAttribute('style', 'border');
-        previousCard.setAttribute('src', 'images/Matrix/Card_back_suits_green.svg');
+        previousCard.setAttribute('src', 'images/matrix/Card_back_suits_green.svg');
         previousCard.style.opacity = 0.3;
         // previousCard.removeAttribute('style', 'border');
         cardArray[cardId] = 13;
